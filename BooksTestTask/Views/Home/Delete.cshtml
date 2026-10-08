@@ -1,0 +1,35 @@
+﻿@model BooksTestTask.ViewModels.DeleteBook
+
+@{
+	ViewData["Title"] = "Удаление книги";
+}
+
+<h2>Удаление книги</h2>
+
+<div class="alert alert-danger">
+	<h4>Вы действительно хотите удалить эту книгу?</h4>
+</div>
+
+<div class="card mb-3">
+	<div class="card-body">
+		<dl class="row mb-0">
+			<dt class="col-sm-3">Id</dt>
+			<dd class="col-sm-9">@Model.Id</dd>
+
+			<dt class="col-sm-3">Название</dt>
+			<dd class="col-sm-9">@Model.Title</dd>
+
+			<dt class="col-sm-3">Автор</dt>
+			<dd class="col-sm-9">@Model.Author</dd>
+
+			<dt class="col-sm-3">Год издания</dt>
+			<dd class="col-sm-9">@Model.YearPublished</dd>
+		</dl>
+	</div>
+</div>
+
+<form asp-action="Delete" method="post">
+	<input type="hidden" asp-for="Id" />
+	<button type="submit" class="btn btn-danger">Удалить</button>
+	<a asp-action="Index" class="btn btn-secondary">Отмена</a>
+</form>

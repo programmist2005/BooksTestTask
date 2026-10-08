@@ -1,0 +1,70 @@
+﻿@model BooksTestTask.ViewModels.EditBook
+
+@{
+	ViewData["Title"] = "Редактирование книги";
+}
+
+<h2>Редактирование книги</h2>
+
+<form asp-action="Edit" method="post">
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+	<input type="hidden" asp-for="Id" />
+
+	<div class="mb-3">
+		<label asp-for="Title" class="form-label">Название</label>
+		<input asp-for="Title" class="form-control" />
+		<span asp-validation-for="Title" class="text-danger"></span>
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="Author" class="form-label">Автор</label>
+		<input asp-for="Author" class="form-control" />
+		<span asp-validation-for="Author" class="text-danger"></span>
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="YearPublished" class="form-label">Год издания</label>
+		<input asp-for="YearPublished" class="form-control" type="number" />
+		<span asp-validation-for="YearPublished" class="text-danger"></span>
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="TocXml" class="form-label">Оглавление (XML)</label>
+		<textarea asp-for="TocXml" id="tocEditor" class="form-control" rows="12"></textarea>
+		<span asp-validation-for="TocXml" class="text-danger"></span>
+	</div>
+
+	<button type="submit" class="btn btn-primary">Сохранить</button>
+	<a asp-action="Index" class="btn btn-secondary">Отмена</a>
+</form>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+
+	<script src="~/lib/tinymce/tinymce.min.js"></script>
+	<script>
+		tinymce.init({
+			selector: '#tocEditor',
+			height: 450,
+			menubar: false,
+			plugins: 'code lists link table',
+			toolbar: 'code | undo redo | bold italic | bullist numlist | removeformat',
+			forced_root_block: false,
+			force_br_newlines: true,
+			convert_urls: false,
+			extended_valid_elements: 'toc,chapter[number|title],section[number|title]',
+			custom_elements: 'toc,chapter,section',
+			verify_html: false,
+			cleanup: false,
+			content_style: `
+				body {
+					font-family: Consolas, Monaco, 'Courier New', monospace;
+					font-size: 14px;
+					line-height: 1.5;
+					white-space: pre-wrap;
+				}
+			`
+		});
+	</script>
+}

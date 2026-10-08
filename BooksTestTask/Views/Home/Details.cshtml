@@ -1,0 +1,97 @@
+﻿@model BooksTestTask.ViewModels.DetailBook
+
+@{
+	ViewData["Title"] = "Просмотр книги";
+}
+
+<h2>Просмотр книги</h2>
+
+<div class="card">
+	<div class="card-header">
+		<h4 class="mb-0">@Model.Title</h4>
+	</div>
+	<div class="card-body">
+		<dl class="row">
+			<dt class="col-sm-3">Id</dt>
+			<dd class="col-sm-9">@Model.Id</dd>
+
+			<dt class="col-sm-3">Название</dt>
+			<dd class="col-sm-9">@Model.Title</dd>
+
+			<dt class="col-sm-3">Автор</dt>
+			<dd class="col-sm-9">@Model.Author</dd>
+
+			<dt class="col-sm-3">Год издания</dt>
+			<dd class="col-sm-9">@Model.YearPublished</dd>
+
+			<dt class="col-sm-3">Дата создания</dt>
+			<dd class="col-sm-9">@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
+
+			<dt class="col-sm-3">Дата изменения</dt>
+			<dd class="col-sm-9">@Model.UpdatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
+
+			<dt class="col-sm-3">Оглавление</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrWhiteSpace(Model.TocXml))
+				{
+					try
+					{
+						var xml = System.Xml.Linq.XDocument.Parse(Model.TocXml);
+						var chapters = xml.Root?.Elements("chapter");
+
+						if (chapters != null && chapters.Any())
+						{
+							<ol class="list-group">
+								@foreach (var chapter in chapters)
+								{
+									var chapterNumber = chapter.Attribute("number")?.Value;
+									var chapterTitle = chapter.Attribute("title")?.Value;
+
+									<li class="list-group-item">
+										<strong>@chapterNumber. @chapterTitle</strong>
+
+										@{
+											var sections = chapter.Elements("section");
+										}
+
+										@if (sections.Any())
+										{
+											<ul class="mt-2 mb-0">
+												@foreach (var section in sections)
+												{
+													var sectionNumber = section.Attribute("number")?.Value;
+													var sectionTitle = section.Attribute("title")?.Value;
+
+													<li>@sectionNumber. @sectionTitle</li>
+												}
+											</ul>
+										}
+									</li>
+								}
+							</ol>
+						}
+						else
+						{
+							<span class="text-muted">Оглавление пустое</span>
+						}
+					}
+					catch
+					{
+						<div class="alert alert-warning">
+							Не удалось разобрать XML оглавления
+						</div>
+						<pre class="bg-light p-3 border rounded">@Model.TocXml</pre>
+					}
+				}
+				else
+				{
+					<span class="text-muted">Оглавление отсутствует</span>
+				}
+			</dd>
+		</dl>
+	</div>
+	<div class="card-footer">
+		<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Изменить</a>
+		<a asp-action="Index" class="btn btn-outline-primary">Назад к списку</a>
+	</div>
+</div>

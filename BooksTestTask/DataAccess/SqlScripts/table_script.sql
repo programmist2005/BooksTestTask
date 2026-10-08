@@ -1,0 +1,10 @@
+﻿CREATE TABLE Books
+(
+    Id              INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    Title           VARCHAR(500) NOT NULL,
+    Author          VARCHAR(300) NOT NULL,
+    YearPublished   INTEGER NOT NULL,
+    TocXml          XML NULL,
+    CreatedAt       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
